@@ -57,5 +57,17 @@ namespace Capstone.Classes
                 Console.WriteLine("An error occurred restocking machine..." + ex.Message);
             }
         }
+
+        public void DisplayMainMenu()
+        {
+            Console.WriteLine("Vendo-Matic 800");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("(1) Display Vending Machine Items");
+            Console.WriteLine("(2) Purchase");
+            Console.WriteLine("(3) Exit");
+            Console.WriteLine();
+            Console.WriteLine("Enter a numerical menu option displayed above: ");
+        }      
     }
 }

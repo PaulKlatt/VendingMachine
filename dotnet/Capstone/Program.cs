@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Capstone.Classes;
+using System;
+using System.IO;
 
 namespace Capstone
 {
@@ -6,7 +8,17 @@ namespace Capstone
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //Create a Vending Machine instance
+            VendingMachine newVendingMachine = new VendingMachine();
+
+            //Create path to inventory file
+            string filePath = Path.Combine(Environment.CurrentDirectory, "vendingmachine.csv");
+
+            //Restock
+            newVendingMachine.Restock(filePath);
+
+            //Display the main menu
+            newVendingMachine.DisplayMainMenu();
         }
     }
 }

@@ -35,7 +35,11 @@ namespace CapstoneTests.Classes
             Dictionary<string, VendingMachineItem> actualResult = newVendingMachine.Inventory;
 
             //Assert
-            CollectionAssert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedResult["A1"].QuantityRemaining, actualResult["A1"].QuantityRemaining);
+            Assert.AreEqual(expectedResult["A1"].ProductName, actualResult["A1"].ProductName);
+            Assert.AreEqual(expectedResult["A1"].ProductCost, actualResult["A1"].ProductCost);
+            Assert.AreEqual(expectedResult["A1"].PurchaseMessage, actualResult["A1"].PurchaseMessage);
+            Assert.AreEqual(expectedResult["A1"].Slot, actualResult["A1"].Slot);
         }
     }
 }
