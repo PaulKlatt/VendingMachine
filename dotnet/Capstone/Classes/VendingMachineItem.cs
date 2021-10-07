@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Capstone.Classes.VendingMachineItems
+namespace Capstone.Classes
 {
     public abstract class VendingMachineItem
     {

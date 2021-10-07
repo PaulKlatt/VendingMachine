@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Capstone.Classes.VendingMachineItems;
+using Capstone.Classes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace CapstoneTests.Classes.VendingMachineItems
+namespace CapstoneTests.Classes
 {
     [TestClass]
     public class ChipsTests

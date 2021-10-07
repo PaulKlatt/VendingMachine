@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Capstone.Classes.VendingMachineItems;
+using Capstone.Classes;
 using System.IO;
 
-namespace Capstone.Classes.VendingMachine
+namespace Capstone.Classes
 {
     public class VendingMachine
     {
-        public Dictionary<string, VendingMachineItem> Inventory { get; set; }
+        public Dictionary<string, VendingMachineItem> Inventory { get; set; } = new Dictionary<string, VendingMachineItem>();
 
         public decimal CurrentBalance { get; set; }
 
@@ -22,7 +22,7 @@ namespace Capstone.Classes.VendingMachine
                 {
                     while (!sr.EndOfStream)
                     {
-                        string line = Console.ReadLine();
+                        string line = sr.ReadLine();
                         string[] itemParts = line.Split("|");
                         string slot = itemParts[0];
                         string productName = itemParts[1];
@@ -44,7 +44,7 @@ namespace Capstone.Classes.VendingMachine
                             Gum newGum = new Gum(productName, productCost, slot);
                             Inventory[slot] = newGum;
                         }
-                        else if (productType == "Beverage")
+                        else if (productType == "Drink")
                         {
                             Beverage newBeverage = new Beverage(productName, productCost, slot);
                             Inventory[slot] = newBeverage;
