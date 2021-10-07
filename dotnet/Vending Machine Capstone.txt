@@ -1,0 +1,132 @@
+﻿Capstone
+
+
+What does it do
+
+
+-Takes money (in bill increments)
+-Gives food
+-Restocks on program reset
+-calculates and gives change
+-displays menus
+        -purchase menu
+        -main menu
+        -purchase confirmation messages
+-generates a log file
+-generate/display sales report
+
+
+
+
+What info does it need
+
+
+-inventory/input file
+-what and when it was purchased
+
+Classes
+
+
+Vending machine item abstract parent class
+        
+-public string ProductName
+-public decimal ProductCost
+-public string Slot
+-public abstract string ProductType ?
+-public int amountRemaining
+
+
+Public class Beverage : vendingmachineitem
+        -public string PurchaseMessage
+        Public Beverage(ProductName, ProductCost, Slot) 
+
+
+Public class Chip : vendingmachineitem
+        -public string PurchaseMessage
+        Public Chip(ProductName, ProductCost, Slot) 
+
+
+Public class Candy : vendingmachineitem
+        -public string PurchaseMessage
+        Public Candy(ProductName, ProductCost, Slot) 
+Public class Gum : vendingmachineitem
+        -public string PurchaseMessage
+        Public Gum(ProductName, ProductCost, Slot)
+
+
+
+
+Vending Machine class
+        -public Dictionary inventoryList <location,SlotContents>
+        -public queue <VendingMachineItem> SlotContents
+        -public decimal CurrentBalance
+        -public decimal TotalSales
+//Does this run outta money?
+
+
+-public void Restock()
+        -read inventory file
+        -create vendingmachineitems
+        -add them to inventorylist
+
+
+-public void DisplayMainMenu()
+        -writes the menu to the console
+
+
+-public void GatherMainMenuInput()
+        -read user input
+        -validate input
+        -call submenu
+        -public void DisplayInventory()
+                -format inventory list
+-write formatted inventory list to console
+
+
+        -public void displayPurchaseMenu
+                -write purchase menu to console
+                -writes CurrentBalance to console
+        
+-public void Exit()
+        -closes the application
+        
+        -public FeedMoney()
+                -prompt for valid money amounts
+                -update CurrentBalance and write to console
+                -check validity of input
+                -return to/ call DisplayPurchaseMenu
+                -call writeToLog
+        
+-public void SelectProduct()
+        - call DisplayInventory
+        -prompt for location, check validity, display response, ask again?
+        -decrease CurrentBalance
+        -dequeue inventorylist
+        -display purchase message
+        -call writetolog
+        -track the purchase in sales
+        -return to/ call product menu
+
+
+        -public void FinishTransaction()
+                - converting CurrentBalance to change (in coins, few as possible)
+                -set CurrentBalance to 0
+                -displayMainMenu
+                -call WriteToLog
+
+
+
+
+Log class
+        -public string LogFilePath
+
+
+        -public void WriteToLog(string message)
+                
+-write message to log (DateTime, what was done)
+
+
+
+
+Sales report
+        -
