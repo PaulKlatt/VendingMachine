@@ -6,7 +6,8 @@ namespace Capstone.Classes
 {
     public class ConsoleInterface
     {
-        public VendingMachine vendingMachine = new VendingMachine();
+        public VendingMachineLogic vendingMachine = new VendingMachineLogic();
+        
         public void DisplayMainMenu()
         {
             Console.WriteLine("Vendo-Matic 800");
@@ -45,6 +46,7 @@ namespace Capstone.Classes
                 Logger.Log($"*** End of Vending Machine Operation: {DateTime.Now} ***");
             }
         }
+        
         public  void DisplayInventory()
         {
             Console.Clear();
@@ -61,6 +63,7 @@ namespace Capstone.Classes
             Console.WriteLine();
 
         }
+       
         public void DisplayPurchaseMenu()
         {
             Console.WriteLine();
@@ -97,21 +100,23 @@ namespace Capstone.Classes
             }
             else if (userInput == "3")
             {
-                FinishTransaction();
+                CalculateReturnChange();
+
+                DisplayMainMenu();
             }
         }
+        
         public void FeedMoney()
         {
-            //    -prompt for valid money amounts
-            //    - update CurrentBalance and write to console
-            //    - check validity of input
-            //    -return to / call DisplayPurchaseMenu
-            //    - call writeToLog
-
+            //Prompt the user for the funds to add
             Console.WriteLine();
             Console.WriteLine("Please enter a whole dollar amount (no cents) to add to your purchase balance:");
             Console.WriteLine();
+            
+            //Get the user's input
             string inputMoney = Console.ReadLine();
+            
+            //Validate the user's input
             bool isValid = int.TryParse(inputMoney, out int result);
             while (!isValid || result <= 0)
             {
@@ -120,13 +125,78 @@ namespace Capstone.Classes
                 inputMoney = Console.ReadLine();
                 isValid = int.TryParse(inputMoney, out result);
             }
-            vendingMachine.CurrentBalance += result;
 
-            //Log that money has been feed
-            Logger.Log($"{DateTime.Now} FEED MONEY: {result:C} {vendingMachine.CurrentBalance:C}");
-
+            //Call back end to add the valid entered funds
+            vendingMachine.AddFunds(result);
+           
             Console.WriteLine();
             DisplayPurchaseMenu();
+        }
+
+        public void SelectProduct()
+        {
+            //Display the inventory the console
+            DisplayInventory();
+            
+            //Prompt user for the product to purchse
+            Console.WriteLine();
+            Console.WriteLine("Enter the code corresponding to the product you want:");
+            Console.WriteLine();
+            
+            //Get user input
+            string slot = Console.ReadLine();
+
+            //Validate that user can buy the product they selected
+            if (!vendingMachine.Inventory.ContainsKey(slot))
+            {
+                Console.WriteLine();
+                Console.WriteLine("Invalid code entered.  Please recheck your desired code and try again.");
+                DisplayPurchaseMenu();
+            }
+            else if (vendingMachine.Inventory[slot].QuantityRemaining == 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Product is sold out.  Sorry!  Please select another product and try again.");
+                DisplayPurchaseMenu();
+            }
+            else if (vendingMachine.CurrentBalance < vendingMachine.Inventory[slot].ProductCost)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Insufficient funds.  Please feed more money to make this purchase.");
+                DisplayPurchaseMenu();
+            }
+            else
+            {
+                //Call the back end to purchase the product in the given slot
+                VendingMachineItem itemPurchased = vendingMachine.DispenseProduct(slot);
+
+                //Write to the console what product was purchased
+                Console.WriteLine();
+                Console.WriteLine("DISPENSING PRODUCT");
+                Console.WriteLine($"{itemPurchased.ProductName}: {itemPurchased.ProductCost:C}");
+                Console.WriteLine(itemPurchased.PurchaseMessage);
+                
+                DisplayPurchaseMenu();
+            }
+        }
+
+        public void CalculateReturnChange()
+        {
+            decimal balanceBeforeChangeReturn = vendingMachine.CurrentBalance;
+
+            Dictionary<string, int> coinsToReturn = vendingMachine.CreateChangeInCoins();
+
+            string returnCoinsMessage = $"Dispensing Change: {balanceBeforeChangeReturn:C}";
+            
+            foreach (KeyValuePair<string, int> coins in coinsToReturn)
+            {
+                returnCoinsMessage += $"\n{coins.Key}: {coins.Value}";
+            }
+
+            //Return the change to the user
+            Console.WriteLine();
+            Console.WriteLine(returnCoinsMessage);
+            Console.WriteLine();
         }
     }
 }

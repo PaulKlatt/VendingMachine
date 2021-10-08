@@ -6,13 +6,20 @@ using System.IO;
 
 namespace Capstone.Classes
 {
-    public class VendingMachine
+    public class VendingMachineLogic
     {
         public Dictionary<string, VendingMachineItem> Inventory { get; set; } = new Dictionary<string, VendingMachineItem>();
 
-        public decimal CurrentBalance { get; set; } = 0.0M;
+        public decimal CurrentBalance { get; private set; } = 0;
 
-        public decimal TotalSales { get; set; }
+        public VendingMachineLogic()
+        {
+            //Create path to inventory file
+            string filePath = Path.Combine(Environment.CurrentDirectory, "vendingmachine.csv");
+
+            //Restock the new vending machine
+            Restock(filePath);
+        }
 
         public void Restock(string inputFilePath)
         {
@@ -61,63 +68,9 @@ namespace Capstone.Classes
             }
         }
 
-
-
-
-
-
-
-
-
-        public void SelectProduct()
+        public Dictionary<string, int> CreateChangeInCoins()
         {
-            DisplayInventory();
-            Console.WriteLine();
-            Console.WriteLine("Enter the code corresponding to the product you want:");
-            Console.WriteLine();
-            string slot = Console.ReadLine();
-
-            if (!Inventory.ContainsKey(slot))
-            {
-                Console.WriteLine();
-                Console.WriteLine("Invalid code entered.  Please recheck your desired code and try again.");
-                DisplayPurchaseMenu();
-            }
-            else if (Inventory[slot].QuantityRemaining == 0)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Product is sold out.  Sorry!  Please select another product and try again.");
-                DisplayPurchaseMenu();
-            }
-            else if (CurrentBalance < Inventory[slot].ProductCost)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Insufficient funds.  Please feed more money to make this purchase.");
-                DisplayPurchaseMenu();
-            }
-            else
-            {
-                //Log the product purchased
-                Logger.Log($"{DateTime.Now} {Inventory[slot].ProductName} " +
-                    $"{Inventory[slot].Slot} {CurrentBalance:C} {(CurrentBalance - Inventory[slot].ProductCost):C}");
-
-                Inventory[slot].QuantityRemaining--;
-                CurrentBalance -= Inventory[slot].ProductCost;
-
-                Console.WriteLine();
-                Console.WriteLine("DISPENSING PRODUCT");
-                Console.WriteLine($"{Inventory[slot].ProductName}: {Inventory[slot].ProductCost:C}");
-                Console.WriteLine(Inventory[slot].PurchaseMessage);
-                DisplayPurchaseMenu();
-            }
-        }
-
-        public void FinishTransaction()
-        {
-            //-converting CurrentBalance to change(in coins, few as possible)
-            //   - set CurrentBalance to 0
-            //    - displayMainMenu
-            //    - call WriteToLog
+            Dictionary<string, int> changeToReturn = new Dictionary<string, int>();
 
             //Check that there is money to return
             if (CurrentBalance == 0)
@@ -125,7 +78,7 @@ namespace Capstone.Classes
                 //Log the change returned
                 Logger.Log($"{DateTime.Now} GIVE CHANGE: {CurrentBalance:C} {0:C}");
 
-                DisplayMainMenu();
+                return changeToReturn;
             }
             else
             {
@@ -168,14 +121,23 @@ namespace Capstone.Classes
                     remainder = remainder % 0.01M;
                 }
 
-                //Return the change to the user
-                Console.WriteLine();
-                Console.WriteLine($"Dispensing Change: {CurrentBalance:C}");
-                Console.WriteLine($"Quarters: {quarters}");
-                Console.WriteLine($"Dimes: {dimes}");
-                Console.WriteLine($"Nickels: {nickels}");
-                Console.WriteLine($"Pennies: {pennies}");
-                Console.WriteLine();
+                //Sent the coins to return to the UI
+                if (quarters > 0)
+                {
+                    changeToReturn["Quarters"] = quarters;
+                }
+                if (dimes > 0)
+                {
+                    changeToReturn["Dimes"] = dimes;
+                }
+                if (nickels > 0)
+                {
+                    changeToReturn["Nickels"] = nickels;
+                }
+                if (pennies > 0)
+                {
+                    changeToReturn["Pennies"] = pennies;
+                }
 
                 //Log the change returned
                 Logger.Log($"{DateTime.Now} GIVE CHANGE: {CurrentBalance:C} {0:C}");
@@ -183,15 +145,36 @@ namespace Capstone.Classes
                 //Update current balance to 0
                 CurrentBalance = 0;
 
-                //Go back top the main menu
-                DisplayMainMenu();
+                return changeToReturn;
             }   
         }
 
-        public void AddFunds(decimal fundsToAdd)
+        public decimal AddFunds(decimal fundsToAdd)
         {
+            //Add the entered funds from the UI to the Current Balance
+            CurrentBalance += fundsToAdd;
 
+            //Log that money has been feed
+            Logger.Log($"{DateTime.Now} FEED MONEY: {fundsToAdd:C} {CurrentBalance:C}");
 
+            //returns the updated balance
+            return CurrentBalance;
+        }
+
+        public VendingMachineItem DispenseProduct(string slot)
+        {
+            //Log the product purchased
+            Logger.Log($"{DateTime.Now} {Inventory[slot].ProductName} " +
+                $"{Inventory[slot].Slot} {CurrentBalance:C} {(CurrentBalance - Inventory[slot].ProductCost):C}");
+
+            //Decrease the quatity by 1
+            Inventory[slot].QuantityRemaining--;
+            
+            //Subtract the cost of the product from the current balance
+            CurrentBalance -= Inventory[slot].ProductCost;
+
+            //return the product purchased
+            return Inventory[slot];
         }
 
     }

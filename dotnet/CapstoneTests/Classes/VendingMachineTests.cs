@@ -14,7 +14,7 @@ namespace CapstoneTests.Classes
         public void RestockTest()
         {
             //Arrange
-            VendingMachine newVendingMachine = new VendingMachine();
+            VendingMachineLogic newVendingMachine = new VendingMachineLogic();
             string filePath = Path.Combine(Environment.CurrentDirectory, "testInputFile.csv");
             Dictionary<string, VendingMachineItem> expectedResult = new Dictionary<string, VendingMachineItem>();
 
