@@ -10,7 +10,7 @@ namespace Capstone.Classes
     {
         public Dictionary<string, VendingMachineItem> Inventory { get; set; } = new Dictionary<string, VendingMachineItem>();
 
-        public decimal CurrentBalance { get; set; }
+        public decimal CurrentBalance { get; set; } = 0.0M;
 
         public decimal TotalSales { get; set; }
 
@@ -18,7 +18,7 @@ namespace Capstone.Classes
         {
             try
             {
-                using(StreamReader sr = new StreamReader(inputFilePath))
+                using (StreamReader sr = new StreamReader(inputFilePath))
                 {
                     while (!sr.EndOfStream)
                     {
@@ -52,7 +52,7 @@ namespace Capstone.Classes
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("An error occurred restocking machine..." + ex.Message);
             }
@@ -68,6 +68,64 @@ namespace Capstone.Classes
             Console.WriteLine("(3) Exit");
             Console.WriteLine();
             Console.WriteLine("Enter a numerical menu option displayed above: ");
-        }      
+            string userInput = Console.ReadLine();
+            ProcessMainMenuData(userInput);
+        }
+        public void ProcessMainMenuData(string userInput)
+        {
+            bool validityCheck = int.TryParse(userInput, out int result);
+            while (!validityCheck || ( result != 1 && result != 2 && result != 3))
+            {
+                Console.WriteLine("Invalid Input");
+                Console.WriteLine("Enter a numerical menu option displayed above: ");
+                userInput = Console.ReadLine();
+                validityCheck = int.TryParse(userInput, out result);
+            }
+            if(result == 1)
+            {
+                DisplayInventory();
+            }
+            else if(result == 2)
+            {
+                DisplayPurchaseMenu();
+            }
+            else if(result ==3)
+            {
+                // end program
+            }
+        }
+
+        public void DisplayInventory()
+        {
+            Console.Clear();
+            Console.WriteLine("Current Product Inventory");
+            foreach(KeyValuePair<string, VendingMachineItem> inv in Inventory)
+            {
+                string quantity = inv.Value.QuantityRemaining.ToString();
+                if(inv.Value.QuantityRemaining == 0)
+                {
+                    quantity = "Sold Out";
+                }
+                Console.WriteLine($"Slot#({inv.Value.Slot}) \t{inv.Value.ProductName}: \t${inv.Value.ProductCost}: \tQuantity: {quantity}");
+            }
+            Console.WriteLine();
+            DisplayMainMenu();
+        }
+       
+        public void DisplayPurchaseMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Purchase Menu");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("(1) Feed Money");
+            Console.WriteLine("(2) Select Product");
+            Console.WriteLine("(3) Finish Transaction");
+            Console.WriteLine();
+            Console.WriteLine($"Current Balance: {CurrentBalance:C}");
+            Console.WriteLine();
+            Console.WriteLine("Enter a numerical menu option displayed above: ");
+            string userInput = Console.ReadLine();
+        }
     }
 }
