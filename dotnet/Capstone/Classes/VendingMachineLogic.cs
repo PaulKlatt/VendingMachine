@@ -41,7 +41,7 @@ namespace Capstone.Classes
 
                         if (productType == "Chip")
                         {
-                            Chips newChips = new Chips(productName, productCost, slot);
+                            Chip newChips = new Chip(productName, productCost, slot);
                             Inventory[slot] = newChips;
                         }
                         else if (productType == "Candy")
@@ -56,7 +56,7 @@ namespace Capstone.Classes
                         }
                         else if (productType == "Drink")
                         {
-                            Beverage newBeverage = new Beverage(productName, productCost, slot);
+                            Drink newBeverage = new Drink(productName, productCost, slot);
                             Inventory[slot] = newBeverage;
                         }
                     }

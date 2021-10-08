@@ -174,7 +174,7 @@ namespace Capstone.Classes
                 Console.WriteLine();
                 Console.WriteLine("DISPENSING PRODUCT");
                 Console.WriteLine($"{itemPurchased.ProductName}: {itemPurchased.ProductCost:C}");
-                Console.WriteLine(itemPurchased.PurchaseMessage);
+                Console.WriteLine(itemPurchased.GetPurchaseMesssage());
                 
                 DisplayPurchaseMenu();
             }

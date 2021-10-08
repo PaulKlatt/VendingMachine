@@ -14,14 +14,13 @@ namespace Capstone.Classes
 
         public int QuantityRemaining { get; set; } = 5;
 
-        public string PurchaseMessage { get; }
-
-        public VendingMachineItem(string productName, decimal productCost, string slot, string purchaseMessage)
+        public VendingMachineItem(string productName, decimal productCost, string slot)
         {
             ProductName = productName;
             ProductCost = productCost;
             Slot = slot;
-            PurchaseMessage = purchaseMessage;
         }
+
+        public abstract string GetPurchaseMesssage();
     }
 }

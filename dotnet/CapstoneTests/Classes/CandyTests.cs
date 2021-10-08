@@ -18,7 +18,7 @@ namespace CapstoneTests.Classes
 
             //Act
             Candy newCandy = new Candy("Cowtales", 1.50M, "B2");
-            string actualResult = newCandy.PurchaseMessage;
+            string actualResult = newCandy.GetPurchaseMesssage();
 
             //Assert
             Assert.AreEqual(expectedResult, actualResult);

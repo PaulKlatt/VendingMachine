@@ -7,18 +7,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CapstoneTests.Classes
 {
     [TestClass]
-    public class BeverageTests
+    public class DrinkTests
     {
         [TestMethod]
-        public void Beverage_Constructor_Set_PurchaseMessage()
+        public void Drink_Constructor_Set_PurchaseMessage()
         {
             //Arrange
             //C1|Cola|1.25|Drink
             string expectedResult = "Glug Glug, Yum!";
 
             //Act
-            Beverage newBeverage = new Beverage("Cola", 1.25M, "C1");
-            string actualResult = newBeverage.PurchaseMessage;
+            Drink newBeverage = new Drink("Cola", 1.25M, "C1");
+            string actualResult = newBeverage.GetPurchaseMesssage();
 
             //Assert
             Assert.AreEqual(expectedResult, actualResult);

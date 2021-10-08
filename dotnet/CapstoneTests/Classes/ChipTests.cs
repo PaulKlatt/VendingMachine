@@ -8,18 +8,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CapstoneTests.Classes
 {
     [TestClass]
-    public class ChipsTests
+    public class ChipTests
     {
         [TestMethod]
-        public void Chips_Constructor_Set_PurchaseMessage()
+        public void Chip_Constructor_Set_PurchaseMessage()
         {
             //Arrange
             //A1|Potato Crisps|3.05|Chips
             string expectedResult = "Crunch Crunch, Yum!";
 
             //Act
-            Chips newChips = new Chips("Potato Crips", 3.05M, "A1");
-            string actualResult = newChips.PurchaseMessage;
+            Chip newChips = new Chip("Potato Crips", 3.05M, "A1");
+            string actualResult = newChips.GetPurchaseMesssage();
 
             //Assert
             Assert.AreEqual(expectedResult, actualResult);

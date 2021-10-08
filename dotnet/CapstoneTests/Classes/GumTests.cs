@@ -18,7 +18,7 @@ namespace CapstoneTests.Classes
 
             //Act
             Gum newGum = new Gum("Triplemint", 0.75M, "D4");
-            string actualResult = newGum.PurchaseMessage;
+            string actualResult = newGum.GetPurchaseMesssage();
 
             //Assert
             Assert.AreEqual(expectedResult, actualResult);

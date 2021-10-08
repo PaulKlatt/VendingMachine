@@ -4,17 +4,17 @@ using System.Text;
 
 namespace Capstone.Classes
 {
-    public class Gum : VendingMachineItem
+    public class Chip : VendingMachineItem
     {
-        public Gum(string productName, decimal productCost, string slot)
-            : base(productName, productCost, slot)
+        public Chip(string productName, decimal productCost, string slot)
+           : base(productName, productCost, slot)
         {
 
         }
 
         public override string GetPurchaseMesssage()
         {
-            return "Chew Chew, Yum!";
+            return "Crunch Crunch, Yum!";
         }
     }
 }
