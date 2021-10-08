@@ -69,9 +69,9 @@ namespace Capstone.Classes
             Console.WriteLine();
             Console.WriteLine("Enter a numerical menu option displayed above: ");
             string userInput = Console.ReadLine();
-            ProcessMainMenuData(userInput);
+            ProcessMainMenuInput(userInput);
         }
-        public void ProcessMainMenuData(string userInput)
+        public void ProcessMainMenuInput(string userInput)
         {
             bool validityCheck = int.TryParse(userInput, out int result);
             while (!validityCheck || ( result != 1 && result != 2 && result != 3))
@@ -84,6 +84,7 @@ namespace Capstone.Classes
             if(result == 1)
             {
                 DisplayInventory();
+                DisplayMainMenu();
             }
             else if(result == 2)
             {
@@ -109,12 +110,12 @@ namespace Capstone.Classes
                 Console.WriteLine($"Slot#({inv.Value.Slot}) \t{inv.Value.ProductName}: \t${inv.Value.ProductCost}: \tQuantity: {quantity}");
             }
             Console.WriteLine();
-            DisplayMainMenu();
+            
         }
        
         public void DisplayPurchaseMenu()
         {
-            Console.Clear();
+            Console.WriteLine();
             Console.WriteLine("Purchase Menu");
             Console.WriteLine();
             Console.WriteLine();
@@ -126,6 +127,96 @@ namespace Capstone.Classes
             Console.WriteLine();
             Console.WriteLine("Enter a numerical menu option displayed above: ");
             string userInput = Console.ReadLine();
+            ProcessPurchaseMenuInput(userInput);
+        }
+
+        public void ProcessPurchaseMenuInput(string userInput)
+        {
+            
+            while (userInput != "1" && userInput != "2" && userInput != "3")
+            {
+                Console.WriteLine("Invalid Input");
+                Console.WriteLine("Enter a numerical menu option displayed above: ");
+                userInput = Console.ReadLine();
+            }
+            if (userInput == "1")
+            {
+                FeedMoney();
+            }
+            else if (userInput == "2")
+            {
+                SelectProduct();
+            }
+            else if (userInput == "3")
+            {
+                // call finishtransaction
+            }
+        }
+
+        public void FeedMoney()
+        {
+            //    -prompt for valid money amounts
+            //    - update CurrentBalance and write to console
+            //    - check validity of input
+            //    -return to / call DisplayPurchaseMenu
+            //    - call writeToLog
+
+            Console.WriteLine();
+            Console.WriteLine("Please enter a whole dollar amount (no cents) to add to your purchase balance:");
+            Console.WriteLine();
+            string inputMoney = Console.ReadLine();
+            bool isValid = int.TryParse(inputMoney, out int result);
+            while(!isValid || result <= 0)
+            {
+                Console.WriteLine("Invalid input.");
+                Console.WriteLine("Please enter a whole dollar (no cents) amount:");
+                inputMoney = Console.ReadLine();
+                isValid = int.TryParse(inputMoney, out result);
+            }
+            CurrentBalance += result;
+            // write to log
+
+            Console.WriteLine();
+            DisplayPurchaseMenu();
+        }
+
+        public void SelectProduct()
+        {
+            DisplayInventory();
+            Console.WriteLine();
+            Console.WriteLine("Enter the code corresponding to the product you want:");
+            Console.WriteLine();
+            string slot = Console.ReadLine();
+
+            if (!Inventory.ContainsKey(slot))
+            {
+                Console.WriteLine();
+                Console.WriteLine("Invalid code entered.  Please recheck your desired code and try again.");
+                DisplayPurchaseMenu();
+            }
+            else if (Inventory[slot].QuantityRemaining == 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Product is sold out.  Sorry!  Please select another product and try again.");
+                DisplayPurchaseMenu();
+            }
+            else if (CurrentBalance < Inventory[slot].ProductCost)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Insufficient funds.  Please feed more money to make this purchase.");
+                DisplayPurchaseMenu();
+            }
+            else
+            {
+                Inventory[slot].QuantityRemaining--;
+                CurrentBalance -= Inventory[slot].ProductCost;
+                //write to log
+                Console.WriteLine();
+                Console.WriteLine("DISPENSING PRODUCT");
+                Console.WriteLine($"{Inventory[slot].ProductName}: {Inventory[slot].ProductCost:C}");
+                Console.WriteLine(Inventory[slot].PurchaseMessage);
+                DisplayPurchaseMenu();
+            }
         }
     }
 }
