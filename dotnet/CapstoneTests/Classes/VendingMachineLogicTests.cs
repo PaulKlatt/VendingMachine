@@ -8,7 +8,7 @@ using System.IO;
 namespace CapstoneTests.Classes
 {
     [TestClass]
-    public class VendingMachineTests
+    public class VendingMachineLogicTests
     {
         [TestMethod]
         public void RestockTest()
@@ -40,16 +40,6 @@ namespace CapstoneTests.Classes
             Assert.AreEqual(expectedResult["A1"].ProductCost, actualResult["A1"].ProductCost);
             Assert.AreEqual(expectedResult["A1"].PurchaseMessage, actualResult["A1"].PurchaseMessage);
             Assert.AreEqual(expectedResult["A1"].Slot, actualResult["A1"].Slot);
-        }
-        [TestMethod]
-        public void ProcessMainMenuTest()
-        {
-            //Arrange
-
-            //Act
-
-            //Assert
-
         }
     }
 }
