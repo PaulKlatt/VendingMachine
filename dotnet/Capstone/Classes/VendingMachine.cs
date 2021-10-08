@@ -76,24 +76,23 @@ namespace Capstone.Classes
         }
         public void ProcessMainMenuInput(string userInput)
         {
-            bool validityCheck = int.TryParse(userInput, out int result);
-            while (!validityCheck || ( result != 1 && result != 2 && result != 3))
+            while (userInput != "1" && userInput != "2" && userInput != "3")
             {
                 Console.WriteLine("Invalid Input");
                 Console.WriteLine("Enter a numerical menu option displayed above: ");
                 userInput = Console.ReadLine();
-                validityCheck = int.TryParse(userInput, out result);
             }
-            if(result == 1)
+            
+            if (userInput == "1")
             {
                 DisplayInventory();
                 DisplayMainMenu();
             }
-            else if(result == 2)
+            else if(userInput == "2")
             {
                 DisplayPurchaseMenu();
             }
-            else if(result ==3)
+            else if(userInput =="3")
             {
                 //Log that Vending Machine has ended
                 Logger.Log($"*** End of Vending Machine Operation: {DateTime.Now} ***");

@@ -17,7 +17,6 @@ What does it do
 
 
 
-
 What info does it need
 
 
@@ -80,12 +79,12 @@ Vending Machine class
         -call submenu
         -public void DisplayInventory()
                 -format inventory list
--write formatted inventory list to console
+	-write formatted inventory list to console
 
 
-        -public void displayPurchaseMenu
-                -write purchase menu to console
-                -writes CurrentBalance to console
+-public void displayPurchaseMenu
+         -write purchase menu to console
+         -writes CurrentBalance to console
         
 -public void Exit()
         -closes the application
@@ -108,11 +107,11 @@ Vending Machine class
         -return to/ call product menu
 
 
-        -public void FinishTransaction()
-                - converting CurrentBalance to change (in coins, few as possible)
-                -set CurrentBalance to 0
-                -displayMainMenu
-                -call WriteToLog
+-public void FinishTransaction()
+         -converting CurrentBalance to change (in coins, few as possible)
+         -set CurrentBalance to 0
+         -displayMainMenu
+         -call WriteToLog
 
 
 

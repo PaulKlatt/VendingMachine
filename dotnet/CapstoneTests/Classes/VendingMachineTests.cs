@@ -41,5 +41,15 @@ namespace CapstoneTests.Classes
             Assert.AreEqual(expectedResult["A1"].PurchaseMessage, actualResult["A1"].PurchaseMessage);
             Assert.AreEqual(expectedResult["A1"].Slot, actualResult["A1"].Slot);
         }
+        [TestMethod]
+        public void ProcessMainMenuTest()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+
+        }
     }
 }
