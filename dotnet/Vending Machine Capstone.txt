@@ -129,4 +129,32 @@ Log class
 
 
 Sales report
+
+**********************************************************************************************
+
+Things To Can Do:
+
+Write Unit Tests
+	- May require some changes to our methods to make them easier to test
+
+Add Docmentation/Comments to our Methods
+	- Use the "///" above a method signature to generate documentation
+
+Move code out of Program.cs main method
+	- Create a public Run() method in VendingMacine.cs and move the code in the main
+	method there
+
+	- Set all properties and methods in VendingMachine.cs other than Run() to private,
+	thus creating data safety (Encapsulaton) by making Run() the only way to interact with
+	VendingMacine from the outside
+
+	- Have the Program.cs main method just call the public Run() for VendingMacince
+
+Look for Duplicate Code that we can refactor into a common/reusable method
+
+Make User Prompts More descriptive
+
+Make our Menus and Spacing look nicer
+
+Desgin and Develop option Sales Reporting feature
         -

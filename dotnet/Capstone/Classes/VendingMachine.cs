@@ -16,6 +16,9 @@ namespace Capstone.Classes
 
         public void Restock(string inputFilePath)
         {
+            //Log that we are restocking
+            Logger.Log($"*** Restocking the Vending Machine From: {inputFilePath} ***");
+
             try
             {
                 using (StreamReader sr = new StreamReader(inputFilePath))
@@ -92,7 +95,8 @@ namespace Capstone.Classes
             }
             else if(result ==3)
             {
-                // end program
+                //Log that Vending Machine has ended
+                Logger.Log($"*** End of Vending Machine Operation: {DateTime.Now} ***");
             }
         }
 
@@ -149,7 +153,7 @@ namespace Capstone.Classes
             }
             else if (userInput == "3")
             {
-                // call finishtransaction
+                FinishTransaction();
             }
         }
 
@@ -174,7 +178,9 @@ namespace Capstone.Classes
                 isValid = int.TryParse(inputMoney, out result);
             }
             CurrentBalance += result;
-            // write to log
+
+            //Log that money has been feed
+            Logger.Log($"{DateTime.Now} FEED MONEY: {result:C} {CurrentBalance:C}");
 
             Console.WriteLine();
             DisplayPurchaseMenu();
@@ -208,15 +214,95 @@ namespace Capstone.Classes
             }
             else
             {
+                //Log the product purchased
+                Logger.Log($"{DateTime.Now} {Inventory[slot].ProductName} " +
+                    $"{Inventory[slot].Slot} {CurrentBalance:C} {(CurrentBalance - Inventory[slot].ProductCost):C}");
+
                 Inventory[slot].QuantityRemaining--;
                 CurrentBalance -= Inventory[slot].ProductCost;
-                //write to log
+
                 Console.WriteLine();
                 Console.WriteLine("DISPENSING PRODUCT");
                 Console.WriteLine($"{Inventory[slot].ProductName}: {Inventory[slot].ProductCost:C}");
                 Console.WriteLine(Inventory[slot].PurchaseMessage);
                 DisplayPurchaseMenu();
             }
+        }
+
+        public void FinishTransaction()
+        {
+            //-converting CurrentBalance to change(in coins, few as possible)
+            //   - set CurrentBalance to 0
+            //    - displayMainMenu
+            //    - call WriteToLog
+
+            //Check that there is money to return
+            if (CurrentBalance == 0)
+            {
+                //Log the change returned
+                Logger.Log($"{DateTime.Now} GIVE CHANGE: {CurrentBalance:C} {0:C}");
+
+                DisplayMainMenu();
+            }
+            else
+            {
+                //Check if current balance is larger than a quarter
+                int quarters = 0;
+                int dimes = 0;
+                int nickels = 0;
+                int pennies = 0;
+
+                decimal remainder = CurrentBalance;
+
+                if (remainder >= 0.25M)
+                {
+                    //Figure out how many quaters
+                    quarters = (int)(remainder / 0.25M);
+                    remainder = remainder % 0.25M;
+                }
+
+                //Check if reaminder is larger than a dime
+                if (remainder >= 0.10M)
+                {
+                    //Figure out how many dimes
+                    dimes = (int)(remainder / 0.10M);
+                    remainder = remainder % 0.10M;
+                }
+
+                //Check if reaminder is larger than a nickel
+                if (remainder >= 0.05M)
+                {
+                    //Figure out how many nickels
+                    nickels = (int)(remainder / 0.05M);
+                    remainder = remainder % 0.05M;
+                }
+
+                //Check if reaminder is larger than a penny
+                if (remainder >= 0.01M)
+                {
+                    //Figure out how many pennies
+                    pennies = (int)(remainder / 0.01M);
+                    remainder = remainder % 0.01M;
+                }
+
+                //Return the change to the user
+                Console.WriteLine();
+                Console.WriteLine($"Dispensing Change: {CurrentBalance:C}");
+                Console.WriteLine($"Quarters: {quarters}");
+                Console.WriteLine($"Dimes: {dimes}");
+                Console.WriteLine($"Nickels: {nickels}");
+                Console.WriteLine($"Pennies: {pennies}");
+                Console.WriteLine();
+
+                //Log the change returned
+                Logger.Log($"{DateTime.Now} GIVE CHANGE: {CurrentBalance:C} {0:C}");
+
+                //Update current balance to 0
+                CurrentBalance = 0;
+
+                //Go back top the main menu
+                DisplayMainMenu();
+            }   
         }
     }
 }

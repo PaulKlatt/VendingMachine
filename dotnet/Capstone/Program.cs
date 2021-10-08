@@ -8,17 +8,27 @@ namespace Capstone
     {
         static void Main(string[] args)
         {
-            //Create a Vending Machine instance
-            VendingMachine newVendingMachine = new VendingMachine();
+            try
+            {
+                //Log that Vending Machine has started
+                Logger.Log($"*** Start of Vending Machine Operation: {DateTime.Now} ***");
 
-            //Create path to inventory file
-            string filePath = Path.Combine(Environment.CurrentDirectory, "vendingmachine.csv");
+                //Create a Vending Machine instance
+                VendingMachine newVendingMachine = new VendingMachine();
 
-            //Restock
-            newVendingMachine.Restock(filePath);
+                //Create path to inventory file
+                string filePath = Path.Combine(Environment.CurrentDirectory, "vendingmachine.csv");
 
-            //Display the main menu
-            newVendingMachine.DisplayMainMenu();
+                //Restock
+                newVendingMachine.Restock(filePath);
+
+                //Display the main menu
+                newVendingMachine.DisplayMainMenu();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred:\n{ex.Message}");
+            }
         }
     }
 }
