@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Capstone.Classes
 {
-    public abstract class VendingMachineItem
+    public abstract class VendingMachineItem 
     {
         public string ProductName { get; }
 

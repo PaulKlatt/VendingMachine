@@ -22,7 +22,7 @@ namespace Capstone.Classes
             Console.WriteLine("(2) Purchase");
             Console.WriteLine("(3) Exit");
             Console.WriteLine();
-            Console.WriteLine("Enter a numerical menu option displayed above: ");
+            Console.WriteLine("Enter a numerical menu option displayed above: (1-2-3)");
             string userInput = Console.ReadLine();
             ProcessMainMenuInput(userInput);
         }
@@ -33,7 +33,7 @@ namespace Capstone.Classes
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid Input");
-                Console.WriteLine("Enter a numerical menu option displayed above: ");
+                Console.WriteLine("Enter a numerical menu option displayed above: (1-2-3)");
                 userInput = Console.ReadLine();
             }
 
@@ -83,7 +83,7 @@ namespace Capstone.Classes
             Console.WriteLine();
             Console.WriteLine($"Current Balance: {VendingMachine.CurrentBalance:C}");
             Console.WriteLine();
-            Console.WriteLine("Enter a numerical menu option displayed above: ");
+            Console.WriteLine("Enter a numerical menu option displayed above: (1-2-3)");
             string userInput = Console.ReadLine();
             ProcessPurchaseMenuInput(userInput);
         }
@@ -95,7 +95,7 @@ namespace Capstone.Classes
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid Input");
-                Console.WriteLine("Enter a numerical menu option displayed above: ");
+                Console.WriteLine("Enter a numerical menu option displayed above: (1-2-3)");
                 userInput = Console.ReadLine();
             }
             if (userInput == "1")
@@ -108,7 +108,7 @@ namespace Capstone.Classes
             }
             else if (userInput == "3")
             {
-                Console.WriteLine();
+                Console.Clear();
                 CalculateReturnChange();
 
                 DisplayMainMenu();
@@ -202,7 +202,6 @@ namespace Capstone.Classes
             }
 
             //Return the change to the user
-            Console.WriteLine();
             Console.WriteLine(returnCoinsMessage);
             Console.WriteLine();
         }
