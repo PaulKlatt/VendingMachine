@@ -7,7 +7,8 @@ namespace Capstone.Classes
 {
     public class Logger
     {
-        public static string LogFilePath = Path.Combine(Environment.CurrentDirectory, "Transaction Log.txt");
+        public static string LogFilePath = Path.Combine(Environment.CurrentDirectory, 
+            $"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}-Transaction Log.txt");
 
         public static void Log(string logMessage)
         {
