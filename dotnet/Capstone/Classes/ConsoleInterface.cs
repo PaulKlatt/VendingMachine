@@ -31,6 +31,7 @@ namespace Capstone.Classes
         {
             while (userInput != "1" && userInput != "2" && userInput != "3")
             {
+                Console.WriteLine();
                 Console.WriteLine("Invalid Input");
                 Console.WriteLine("Enter a numerical menu option displayed above: ");
                 userInput = Console.ReadLine();
@@ -43,6 +44,7 @@ namespace Capstone.Classes
             }
             else if (userInput == "2")
             {
+                Console.Clear();
                 DisplayPurchaseMenu();
             }
             else if (userInput == "3")
@@ -91,6 +93,7 @@ namespace Capstone.Classes
 
             while (userInput != "1" && userInput != "2" && userInput != "3")
             {
+                Console.WriteLine();
                 Console.WriteLine("Invalid Input");
                 Console.WriteLine("Enter a numerical menu option displayed above: ");
                 userInput = Console.ReadLine();
@@ -105,6 +108,7 @@ namespace Capstone.Classes
             }
             else if (userInput == "3")
             {
+                Console.WriteLine();
                 CalculateReturnChange();
 
                 DisplayMainMenu();
@@ -125,10 +129,9 @@ namespace Capstone.Classes
             bool isValid = int.TryParse(inputMoney, out int result);
             while (!isValid || result <= 0)
             {
-                Console.WriteLine("Invalid input.");
-                Console.WriteLine("Please enter a whole dollar (no cents) amount:");
-                inputMoney = Console.ReadLine();
-                isValid = int.TryParse(inputMoney, out result);
+                Console.Clear();
+                Console.WriteLine("Invalid input: requires whole dollar amount (no cents).");
+                DisplayPurchaseMenu();
             }
 
             //Call back end to add the valid entered funds
@@ -149,24 +152,24 @@ namespace Capstone.Classes
             Console.WriteLine();
             
             //Get user input
-            string slot = Console.ReadLine();
+            string slot = Console.ReadLine().ToUpper();
 
             //Validate that user can buy the product they selected
             if (!VendingMachine.Inventory.ContainsKey(slot))
             {
-                Console.WriteLine();
+                Console.Clear();
                 Console.WriteLine("Invalid code entered.  Please recheck your desired code and try again.");
                 DisplayPurchaseMenu();
             }
             else if (VendingMachine.Inventory[slot].QuantityRemaining == 0)
             {
-                Console.WriteLine();
+                Console.Clear();
                 Console.WriteLine("Product is sold out.  Sorry!  Please select another product and try again.");
                 DisplayPurchaseMenu();
             }
             else if (VendingMachine.CurrentBalance < VendingMachine.Inventory[slot].ProductCost)
             {
-                Console.WriteLine();
+                Console.Clear();
                 Console.WriteLine("Insufficient funds.  Please feed more money to make this purchase.");
                 DisplayPurchaseMenu();
             }
@@ -176,7 +179,7 @@ namespace Capstone.Classes
                 VendingMachineItem itemPurchased = VendingMachine.DispenseProduct(slot);
 
                 //Write to the console what product was purchased
-                Console.WriteLine();
+                Console.Clear();
                 Console.WriteLine("DISPENSING PRODUCT");
                 Console.WriteLine($"{itemPurchased.ProductName}: {itemPurchased.ProductCost:C}");
                 Console.WriteLine(itemPurchased.GetPurchaseMesssage());

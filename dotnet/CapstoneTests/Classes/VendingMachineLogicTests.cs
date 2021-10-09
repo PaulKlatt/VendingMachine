@@ -135,7 +135,6 @@ namespace CapstoneTests.Classes
 
             // Act
             VendingMachineItem actual = newVendingMachine.DispenseProduct("A1");
-
             // Assert
             Assert.AreEqual(expected.ProductName, actual.ProductName);
             Assert.AreEqual(expected.ProductCost, actual.ProductCost);
