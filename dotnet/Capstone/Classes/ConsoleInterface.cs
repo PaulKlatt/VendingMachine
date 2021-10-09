@@ -6,7 +6,12 @@ namespace Capstone.Classes
 {
     public class ConsoleInterface
     {
-        public VendingMachineLogic vendingMachine = new VendingMachineLogic();
+        public VendingMachineLogic VendingMachine { get; private set; } 
+
+        public ConsoleInterface(VendingMachineLogic vendingMachine)
+        {
+            VendingMachine = vendingMachine;
+        }
         
         public void DisplayMainMenu()
         {
@@ -51,7 +56,7 @@ namespace Capstone.Classes
         {
             Console.Clear();
             Console.WriteLine("Current Product Inventory");
-            foreach (KeyValuePair<string, VendingMachineItem> inv in vendingMachine.Inventory)
+            foreach (KeyValuePair<string, VendingMachineItem> inv in VendingMachine.Inventory)
             {
                 string quantity = inv.Value.QuantityRemaining.ToString();
                 if (inv.Value.QuantityRemaining == 0)
@@ -74,7 +79,7 @@ namespace Capstone.Classes
             Console.WriteLine("(2) Select Product");
             Console.WriteLine("(3) Finish Transaction");
             Console.WriteLine();
-            Console.WriteLine($"Current Balance: {vendingMachine.CurrentBalance:C}");
+            Console.WriteLine($"Current Balance: {VendingMachine.CurrentBalance:C}");
             Console.WriteLine();
             Console.WriteLine("Enter a numerical menu option displayed above: ");
             string userInput = Console.ReadLine();
@@ -127,7 +132,7 @@ namespace Capstone.Classes
             }
 
             //Call back end to add the valid entered funds
-            vendingMachine.AddFunds(result);
+            VendingMachine.AddFunds(result);
            
             Console.WriteLine();
             DisplayPurchaseMenu();
@@ -147,19 +152,19 @@ namespace Capstone.Classes
             string slot = Console.ReadLine();
 
             //Validate that user can buy the product they selected
-            if (!vendingMachine.Inventory.ContainsKey(slot))
+            if (!VendingMachine.Inventory.ContainsKey(slot))
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid code entered.  Please recheck your desired code and try again.");
                 DisplayPurchaseMenu();
             }
-            else if (vendingMachine.Inventory[slot].QuantityRemaining == 0)
+            else if (VendingMachine.Inventory[slot].QuantityRemaining == 0)
             {
                 Console.WriteLine();
                 Console.WriteLine("Product is sold out.  Sorry!  Please select another product and try again.");
                 DisplayPurchaseMenu();
             }
-            else if (vendingMachine.CurrentBalance < vendingMachine.Inventory[slot].ProductCost)
+            else if (VendingMachine.CurrentBalance < VendingMachine.Inventory[slot].ProductCost)
             {
                 Console.WriteLine();
                 Console.WriteLine("Insufficient funds.  Please feed more money to make this purchase.");
@@ -168,7 +173,7 @@ namespace Capstone.Classes
             else
             {
                 //Call the back end to purchase the product in the given slot
-                VendingMachineItem itemPurchased = vendingMachine.DispenseProduct(slot);
+                VendingMachineItem itemPurchased = VendingMachine.DispenseProduct(slot);
 
                 //Write to the console what product was purchased
                 Console.WriteLine();
@@ -182,9 +187,9 @@ namespace Capstone.Classes
 
         public void CalculateReturnChange()
         {
-            decimal balanceBeforeChangeReturn = vendingMachine.CurrentBalance;
+            decimal balanceBeforeChangeReturn = VendingMachine.CurrentBalance;
 
-            Dictionary<string, int> coinsToReturn = vendingMachine.CreateChangeInCoins();
+            Dictionary<string, int> coinsToReturn = VendingMachine.CreateChangeInCoins();
 
             string returnCoinsMessage = $"Dispensing Change: {balanceBeforeChangeReturn:C}";
             

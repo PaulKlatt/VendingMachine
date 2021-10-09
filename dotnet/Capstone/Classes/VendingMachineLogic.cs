@@ -14,11 +14,7 @@ namespace Capstone.Classes
 
         public VendingMachineLogic()
         {
-            //Create path to inventory file
-            string filePath = Path.Combine(Environment.CurrentDirectory, "vendingmachine.csv");
-
-            //Restock the new vending machine
-            Restock(filePath);
+            
         }
 
         public void Restock(string inputFilePath)
