@@ -6,13 +6,13 @@ namespace Capstone.Classes
 {
     public class ConsoleInterface
     {
-        public VendingMachineLogic VendingMachine { get; private set; } 
+        public VendingMachineLogic VendingMachine { get; private set; }
 
         public ConsoleInterface(VendingMachineLogic vendingMachine)
         {
             VendingMachine = vendingMachine;
         }
-        
+
         public void DisplayMainMenu()
         {
             Console.WriteLine("Vendo-Matic 800");
@@ -27,9 +27,9 @@ namespace Capstone.Classes
             ProcessMainMenuInput(userInput);
         }
 
-        public  void ProcessMainMenuInput(string userInput)
+        public void ProcessMainMenuInput(string userInput)
         {
-            while (userInput != "1" && userInput != "2" && userInput != "3")
+            while (userInput != "1" && userInput != "2" && userInput != "3" && userInput != "4")
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid Input");
@@ -52,15 +52,22 @@ namespace Capstone.Classes
                 //Log that Vending Machine has ended
                 Logger.Log($"*** End of Vending Machine Operation: {DateTime.Now} ***");
             }
+            else if (userInput == "4")
+            {
+                Console.Clear();
+                Console.WriteLine("Generated sales report.");
+                VendingMachine.GenerateSalesReport();
+                DisplayMainMenu();
+            }
         }
-        
-        public  void DisplayInventory()
+
+        public void DisplayInventory()
         {
             Console.Clear();
             Console.WriteLine("Current Product Inventory");
             foreach (KeyValuePair<string, Queue<VendingMachineItem>> inv in VendingMachine.Inventory)
             {
- 
+
                 if (inv.Value.Count == 0)
                 {
                     Console.WriteLine($"Slot#({inv.Key}) SOLD OUT");
@@ -73,7 +80,7 @@ namespace Capstone.Classes
             Console.WriteLine();
 
         }
-       
+
         public void DisplayPurchaseMenu()
         {
             Console.WriteLine();
@@ -91,7 +98,7 @@ namespace Capstone.Classes
             ProcessPurchaseMenuInput(userInput);
         }
 
-        public  void ProcessPurchaseMenuInput(string userInput)
+        public void ProcessPurchaseMenuInput(string userInput)
         {
 
             while (userInput != "1" && userInput != "2" && userInput != "3")
@@ -117,17 +124,17 @@ namespace Capstone.Classes
                 DisplayMainMenu();
             }
         }
-        
+
         public void FeedMoney()
         {
             //Prompt the user for the funds to add
             Console.WriteLine();
             Console.WriteLine("Please enter a whole dollar amount (no cents) to add to your purchase balance:");
             Console.WriteLine();
-            
+
             //Get the user's input
             string inputMoney = Console.ReadLine();
-            
+
             //Validate the user's input
             bool isValid = int.TryParse(inputMoney, out int result);
             if (!isValid || result <= 0)
@@ -150,12 +157,12 @@ namespace Capstone.Classes
         {
             //Display the inventory the console
             DisplayInventory();
-            
+
             //Prompt user for the product to purchse
             Console.WriteLine();
             Console.WriteLine("Enter the code corresponding to the product you want:");
             Console.WriteLine();
-            
+
             //Get user input
             string slot = Console.ReadLine().ToUpper();
 
@@ -188,7 +195,7 @@ namespace Capstone.Classes
                 Console.WriteLine("DISPENSING PRODUCT");
                 Console.WriteLine($"{itemPurchased.ProductName}: {itemPurchased.ProductCost:C}");
                 Console.WriteLine(itemPurchased.GetPurchaseMesssage());
-                
+
                 DisplayPurchaseMenu();
             }
         }
@@ -200,7 +207,7 @@ namespace Capstone.Classes
             Dictionary<string, int> coinsToReturn = VendingMachine.CreateChangeInCoins();
 
             string returnCoinsMessage = $"Dispensing Change: {balanceBeforeChangeReturn:C}";
-            
+
             foreach (KeyValuePair<string, int> coins in coinsToReturn)
             {
                 returnCoinsMessage += $"\n{coins.Key}: {coins.Value}";

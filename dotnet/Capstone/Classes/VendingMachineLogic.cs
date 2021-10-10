@@ -13,10 +13,7 @@ namespace Capstone.Classes
 
         public decimal CurrentBalance { get; private set; } = 0;
 
-        public VendingMachineLogic()
-        {
-            
-        }
+        private Dictionary<string, List<VendingMachineItem>> SalesHistory { get; set; } = new Dictionary<string, List<VendingMachineItem>>();
 
         public void Restock(string inputFilePath)
         {
@@ -209,7 +206,43 @@ namespace Capstone.Classes
             CurrentBalance -= Inventory[slot].Peek().ProductCost;
 
             //return the product purchased. Decrease the quatity by 1
-            return Inventory[slot].Dequeue();
+            VendingMachineItem purchasedItem = Inventory[slot].Dequeue();
+            // Add to sales history
+            if (SalesHistory.ContainsKey(purchasedItem.ProductName))
+            {
+                SalesHistory[purchasedItem.ProductName].Add(purchasedItem);
+            }
+            else
+            {
+                SalesHistory[purchasedItem.ProductName] = new List<VendingMachineItem>();
+                SalesHistory[purchasedItem.ProductName].Add(purchasedItem);
+            }
+            return purchasedItem;
+        }
+
+        public void GenerateSalesReport()
+        {
+            try
+            {
+                string salesFilePath = Path.Combine(Environment.CurrentDirectory, 
+                    $"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")} - Sales Report.txt");
+
+                using(StreamWriter sw = new StreamWriter(salesFilePath))
+                {
+                    decimal totalSales = 0M;
+                    foreach(KeyValuePair<string, List<VendingMachineItem>> items in SalesHistory)
+                    {
+                        sw.WriteLine($"{items.Key}|{items.Value.Count}");
+                        totalSales += items.Value.Count * items.Value[0].ProductCost;
+                    }
+                    sw.WriteLine();
+                    sw.WriteLine($"TOTAL SALES: {totalSales:C}");
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error while generating sales report." + ex.Message);
+            }
         }
 
     }
