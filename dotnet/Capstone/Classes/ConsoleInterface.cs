@@ -58,14 +58,17 @@ namespace Capstone.Classes
         {
             Console.Clear();
             Console.WriteLine("Current Product Inventory");
-            foreach (KeyValuePair<string, VendingMachineItem> inv in VendingMachine.Inventory)
+            foreach (KeyValuePair<string, Queue<VendingMachineItem>> inv in VendingMachine.Inventory)
             {
-                string quantity = inv.Value.QuantityRemaining.ToString();
-                if (inv.Value.QuantityRemaining == 0)
+ 
+                if (inv.Value.Count == 0)
                 {
-                    quantity = "Sold Out";
+                    Console.WriteLine($"Slot#({inv.Key}) SOLD OUT");
                 }
-                Console.WriteLine($"Slot#({inv.Value.Slot}) \t{inv.Value.ProductName}: \t${inv.Value.ProductCost}: \tQuantity: {quantity}");
+                else
+                {
+                    Console.WriteLine($"Slot#({inv.Key}) \t{inv.Value.Peek().ProductName}: \t${inv.Value.Peek().ProductCost}: \tQuantity: {inv.Value.Count}");
+                }
             }
             Console.WriteLine();
 
@@ -161,13 +164,13 @@ namespace Capstone.Classes
                 Console.WriteLine("Invalid code entered.  Please recheck your desired code and try again.");
                 DisplayPurchaseMenu();
             }
-            else if (VendingMachine.Inventory[slot].QuantityRemaining == 0)
+            else if (VendingMachine.Inventory[slot].Count == 0)
             {
                 Console.Clear();
                 Console.WriteLine("Product is sold out.  Sorry!  Please select another product and try again.");
                 DisplayPurchaseMenu();
             }
-            else if (VendingMachine.CurrentBalance < VendingMachine.Inventory[slot].ProductCost)
+            else if (VendingMachine.CurrentBalance < VendingMachine.Inventory[slot].Peek().ProductCost)
             {
                 Console.Clear();
                 Console.WriteLine("Insufficient funds.  Please feed more money to make this purchase.");

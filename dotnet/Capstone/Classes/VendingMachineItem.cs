@@ -12,8 +12,6 @@ namespace Capstone.Classes
 
         public string Slot { get; }
 
-        public int QuantityRemaining { get; set; } = 5;
-
         public VendingMachineItem(string productName, decimal productCost, string slot)
         {
             ProductName = productName;

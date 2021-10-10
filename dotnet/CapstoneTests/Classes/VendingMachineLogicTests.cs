@@ -16,30 +16,29 @@ namespace CapstoneTests.Classes
             //Arrange
             VendingMachineLogic newVendingMachine = new VendingMachineLogic();
             string filePath = Path.Combine(Environment.CurrentDirectory, "testInputFile.csv");
-            Dictionary<string, VendingMachineItem> expectedResult = new Dictionary<string, VendingMachineItem>();
 
-            Chip newChip = new Chip("Potato Crisps", 3.05M, "A1");
-            expectedResult["A1"] = newChip;
-
-            Candy newCandy = new Candy("Moonpie", 1.80M, "B1");
-            expectedResult["B1"] = newCandy;
-
-            Drink newBeverage = new Drink("Cola", 1.25M, "C1");
-            expectedResult["C1"] = newBeverage;
-
-            Gum newGum = new Gum("U-Chews", 0.85M, "D1");
-            expectedResult["D1"] = newGum;
+            int expectedCountOfItemsForASlot = 5;
 
             //Act
             newVendingMachine.Restock(filePath);
-            Dictionary<string, VendingMachineItem> actualResult = newVendingMachine.Inventory;
+            Dictionary<string, Queue<VendingMachineItem>> actualResult = newVendingMachine.Inventory;
 
             //Assert
-            Assert.AreEqual(expectedResult["A1"].QuantityRemaining, actualResult["A1"].QuantityRemaining);
-            Assert.AreEqual(expectedResult["A1"].ProductName, actualResult["A1"].ProductName);
-            Assert.AreEqual(expectedResult["A1"].ProductCost, actualResult["A1"].ProductCost);
-            Assert.AreEqual(expectedResult["A1"].GetPurchaseMesssage(), actualResult["A1"].GetPurchaseMesssage());
-            Assert.AreEqual(expectedResult["A1"].Slot, actualResult["A1"].Slot);
+            Assert.AreEqual(expectedCountOfItemsForASlot, actualResult["A1"].Count);
+            Assert.AreEqual("Potato Crisps", actualResult["A1"].Peek().ProductName);
+            Assert.AreEqual(3.05M, actualResult["A1"].Peek().ProductCost);
+           
+            Assert.AreEqual(expectedCountOfItemsForASlot, actualResult["B1"].Count);
+            Assert.AreEqual("Moonpie", actualResult["B1"].Peek().ProductName);
+            Assert.AreEqual(1.80M, actualResult["B1"].Peek().ProductCost);
+           
+            Assert.AreEqual(expectedCountOfItemsForASlot, actualResult["C1"].Count);
+            Assert.AreEqual("Cola", actualResult["C1"].Peek().ProductName);
+            Assert.AreEqual(1.25M, actualResult["C1"].Peek().ProductCost);
+           
+            Assert.AreEqual(expectedCountOfItemsForASlot, actualResult["D1"].Count);
+            Assert.AreEqual("U-Chews", actualResult["D1"].Peek().ProductName);
+            Assert.AreEqual(0.85M, actualResult["D1"].Peek().ProductCost);
         }
 
         [TestMethod]
@@ -130,7 +129,6 @@ namespace CapstoneTests.Classes
             VendingMachineLogic newVendingMachine = new VendingMachineLogic();
             string filePath = Path.Combine(Environment.CurrentDirectory, "testInputFile.csv");
             Chip expected = new Chip("Potato Crisps", 3.05M, "A1");
-            expected.QuantityRemaining--; 
             newVendingMachine.Restock(filePath);
 
             // Act
@@ -139,7 +137,7 @@ namespace CapstoneTests.Classes
             Assert.AreEqual(expected.ProductName, actual.ProductName);
             Assert.AreEqual(expected.ProductCost, actual.ProductCost);
             Assert.AreEqual(expected.Slot, actual.Slot);
-            Assert.AreEqual(expected.QuantityRemaining, actual.QuantityRemaining);
+            Assert.AreEqual(4, newVendingMachine.Inventory["A1"].Count);
             Assert.AreEqual(expected.GetPurchaseMesssage(), actual.GetPurchaseMesssage());
         }
     }

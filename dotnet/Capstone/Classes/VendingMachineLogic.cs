@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Capstone.Classes;
 using System.IO;
+using System.Collections;
 
 namespace Capstone.Classes
 {
     public class VendingMachineLogic
     {
-        public Dictionary<string, VendingMachineItem> Inventory { get; set; } = new Dictionary<string, VendingMachineItem>();
+        public Dictionary<string, Queue<VendingMachineItem>> Inventory { get; set; } = new Dictionary<string, Queue<VendingMachineItem>>();
 
         public decimal CurrentBalance { get; private set; } = 0;
 
@@ -37,23 +38,63 @@ namespace Capstone.Classes
 
                         if (productType == "Chip")
                         {
-                            Chip newChips = new Chip(productName, productCost, slot);
-                            Inventory[slot] = newChips;
+                            Chip newChip1 = new Chip(productName, productCost, slot);
+                            Chip newChip2 = new Chip(productName, productCost, slot);
+                            Chip newChip3 = new Chip(productName, productCost, slot);
+                            Chip newChip4 = new Chip(productName, productCost, slot);
+                            Chip newChip5 = new Chip(productName, productCost, slot);
+                            Queue<VendingMachineItem> slotQueue = new Queue<VendingMachineItem>();
+                            slotQueue.Enqueue(newChip1);
+                            slotQueue.Enqueue(newChip2);
+                            slotQueue.Enqueue(newChip3);
+                            slotQueue.Enqueue(newChip4);
+                            slotQueue.Enqueue(newChip5);
+                            Inventory[slot] = slotQueue;
                         }
                         else if (productType == "Candy")
                         {
-                            Candy newCandy = new Candy(productName, productCost, slot);
-                            Inventory[slot] = newCandy;
+                            Candy newCandy1 = new Candy(productName, productCost, slot);
+                            Candy newCandy2 = new Candy(productName, productCost, slot);
+                            Candy newCandy3 = new Candy(productName, productCost, slot);
+                            Candy newCandy4 = new Candy(productName, productCost, slot);
+                            Candy newCandy5 = new Candy(productName, productCost, slot);
+                            Queue<VendingMachineItem> slotQueue = new Queue<VendingMachineItem>();
+                            slotQueue.Enqueue(newCandy1);
+                            slotQueue.Enqueue(newCandy2);
+                            slotQueue.Enqueue(newCandy3);
+                            slotQueue.Enqueue(newCandy4);
+                            slotQueue.Enqueue(newCandy5);
+                            Inventory[slot] = slotQueue;
                         }
                         else if (productType == "Gum")
                         {
-                            Gum newGum = new Gum(productName, productCost, slot);
-                            Inventory[slot] = newGum;
+                            Gum newGum1 = new Gum(productName, productCost, slot);
+                            Gum newGum2 = new Gum(productName, productCost, slot);
+                            Gum newGum3 = new Gum(productName, productCost, slot);
+                            Gum newGum4 = new Gum(productName, productCost, slot);
+                            Gum newGum5 = new Gum(productName, productCost, slot);
+                            Queue<VendingMachineItem> slotQueue = new Queue<VendingMachineItem>();
+                            slotQueue.Enqueue(newGum1);
+                            slotQueue.Enqueue(newGum2);
+                            slotQueue.Enqueue(newGum3);
+                            slotQueue.Enqueue(newGum4);
+                            slotQueue.Enqueue(newGum5);
+                            Inventory[slot] = slotQueue;
                         }
                         else if (productType == "Drink")
                         {
-                            Drink newBeverage = new Drink(productName, productCost, slot);
-                            Inventory[slot] = newBeverage;
+                            Drink newDrink1 = new Drink(productName, productCost, slot);
+                            Drink newDrink2 = new Drink(productName, productCost, slot);
+                            Drink newDrink3 = new Drink(productName, productCost, slot);
+                            Drink newDrink4 = new Drink(productName, productCost, slot);
+                            Drink newDrink5 = new Drink(productName, productCost, slot);
+                            Queue<VendingMachineItem> slotQueue = new Queue<VendingMachineItem>();
+                            slotQueue.Enqueue(newDrink1);
+                            slotQueue.Enqueue(newDrink2);
+                            slotQueue.Enqueue(newDrink3);
+                            slotQueue.Enqueue(newDrink4);
+                            slotQueue.Enqueue(newDrink5);
+                            Inventory[slot] = slotQueue;
                         }
                     }
                 }
@@ -160,17 +201,15 @@ namespace Capstone.Classes
         public VendingMachineItem DispenseProduct(string slot)
         {
             //Log the product purchased
-            Logger.Log($"{DateTime.Now} {Inventory[slot].ProductName} " +
-                $"{Inventory[slot].Slot} {CurrentBalance:C} {(CurrentBalance - Inventory[slot].ProductCost):C}");
+            Logger.Log($"{DateTime.Now} {Inventory[slot].Peek().ProductName} " +
+                $"{slot} {CurrentBalance:C} {(CurrentBalance - Inventory[slot].Peek().ProductCost):C}");
 
-            //Decrease the quatity by 1
-            Inventory[slot].QuantityRemaining--;
-            
+
             //Subtract the cost of the product from the current balance
-            CurrentBalance -= Inventory[slot].ProductCost;
+            CurrentBalance -= Inventory[slot].Peek().ProductCost;
 
-            //return the product purchased
-            return Inventory[slot];
+            //return the product purchased. Decrease the quatity by 1
+            return Inventory[slot].Dequeue();
         }
 
     }
