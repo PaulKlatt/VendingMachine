@@ -130,18 +130,20 @@ namespace Capstone.Classes
             
             //Validate the user's input
             bool isValid = int.TryParse(inputMoney, out int result);
-            while (!isValid || result <= 0)
+            if (!isValid || result <= 0)
             {
                 Console.Clear();
                 Console.WriteLine("Invalid input: requires whole dollar amount (no cents).");
                 DisplayPurchaseMenu();
             }
+            else
+            {
+                //Call back end to add the valid entered funds
+                VendingMachine.AddFunds(result);
 
-            //Call back end to add the valid entered funds
-            VendingMachine.AddFunds(result);
-           
-            Console.WriteLine();
-            DisplayPurchaseMenu();
+                Console.WriteLine();
+                DisplayPurchaseMenu();
+            }
         }
 
         public void SelectProduct()
